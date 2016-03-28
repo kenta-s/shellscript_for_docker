@@ -1,12 +1,5 @@
-#
-# examples:
-#
-# $ docker_sample start   # start the docker container
-# $ docker_sample stop    # stop the container
-# $ docker_sample restart # restart the container
-# $ docker_sample exec    # enter into the container
-
-default_db="db"        # the name of docker image
+default_db="db"        # the name of docker image(DB)
+app_image="app"        # the name of docker image(APP)
 app_name="app"         # this will be a container name.
 db_name="database"     # this will be a container name.
 app_port=3000          # this will be an app port.
@@ -45,5 +38,5 @@ fi
 if [ $1 = "exec" ]; then
   docker run --rm --link $db_name:$db_name \
        -v $app_dir:/$app_name/ \
-       -p $app_port:$app_port -ti --name $app_name $app_name bash
+       -p $app_port:$app_port -ti --name $app_image $app_name bash
 fi
