@@ -1,0 +1,49 @@
+#
+# examples:
+#
+# $ docker_sample start   # start the docker container
+# $ docker_sample stop    # stop the container
+# $ docker_sample restart # restart the container
+# $ docker_sample exec    # enter into the container
+
+default_db="db"        # the name of docker image
+app_name="app"         # this will be a container name.
+db_name="database"     # this will be a container name.
+app_port=3000          # this will be an app port.
+db_port=5432           # this will be a db port. default is for postgres.
+app_dir="/path/to/app" # this must be specified.
+
+if [ $1 = "start" ]; then
+  if [ $# -ne 2 ]
+  then
+    docker run -d --name $db_name -p $db_port:$db_port -ti $default_db
+  else
+    docker run -d --name $db_name -p $db_port:$db_port -ti $2
+  fi
+fi
+
+if [ $1 = "restart" ]; then
+  docker kill $app_name
+  docker kill $db_name
+  docker rm $app_name
+  docker rm $db_name
+  if [ $# -ne 2 ]
+  then
+    docker run -d --name $db_name -p $db_port:$db_port -ti $default_db
+  else
+    docker run -d --name $db_name -p $db_port:$db_port -ti $2
+  fi
+fi
+
+if [ $1 = "stop" ]; then
+  docker kill $app_name
+  docker kill $db_name
+  docker rm $app_name
+  docker rm $db_name
+fi
+
+if [ $1 = "exec" ]; then
+  docker run --rm --link $db_name:$db_name \
+       -v $app_dir:/$app_name/ \
+       -p $app_port:$app_port -ti --name $app_name $app_name bash
+fi
