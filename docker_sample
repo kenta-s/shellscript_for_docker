@@ -37,10 +37,10 @@ fi
 
 if [ $1 = "exec" ]; then
   docker run --rm --link $db_name:$db_name \
-       -v $app_dir:/$app_name/ \
+       -v $app_dir:/$app_name \
        -p $app_port:$app_port -ti --name $app_image $app_name bash
 fi
 
 if [ $1 = "env" ]; then
-  eval $(docker-machine env $2)
+  eval "$(docker-machine env ${2})"
 fi
