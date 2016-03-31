@@ -1,8 +1,9 @@
 # shellscript_for_docker
 
-You have to type the same command over and over again when using Docker.
-To avoid it, you can set this file to `/usr/local/bin` (if you are using Mac.)
-And make your own commands.
+You have to type the same command over and over again when running Docker Containers.
+To avoid it, make your own commands by creating a symbolic link.
+
+`# ln -s /Users/foo/commands/docker_sample /usr/local/bin/docker_sample`
 
 examples:
 - $ docker_sample start            # start the docker container
