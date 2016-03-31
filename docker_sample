@@ -1,4 +1,5 @@
 default_db="db"        # the name of docker image(DB)
+# default_db=null
 app_image="app"        # the name of docker image(APP)
 app_name="app"         # this will be a container name.
 db_name="database"     # this will be a container name.
@@ -7,40 +8,51 @@ db_port=5432           # this will be a db port. default is for postgres.
 app_dir="/path/to/app" # this must be specified.
 
 if [ $1 = "start" ]; then
-  if [ $# -ne 2 ]
-  then
-    docker run -d --name $db_name -p $db_port:$db_port -ti $default_db
-  else
-    docker run -d --name $db_name -p $db_port:$db_port -ti $2
+  if [ $default_db != null ]; then
+    if [ $# -ne 2 ]
+    then
+      docker run -d --name $db_name -p $db_port:$db_port -ti $default_db
+    else
+      docker run -d --name $db_name -p $db_port:$db_port -ti $2
+    fi
   fi
 fi
 
 if [ $1 = "restart" ]; then
-  docker kill $app_name
-  docker kill $db_name
-  docker rm $app_name
-  docker rm $db_name
-  if [ $# -ne 2 ]
-  then
-    docker run -d --name $db_name -p $db_port:$db_port -ti $default_db
-  else
-    docker run -d --name $db_name -p $db_port:$db_port -ti $2
+  if [ $default_db != null ]; then
+    docker kill $app_name
+    docker kill $db_name
+    docker rm $app_name
+    docker rm $db_name
+    if [ $# -ne 2 ]
+    then
+      docker run -d --name $db_name -p $db_port:$db_port -ti $default_db
+    else
+      docker run -d --name $db_name -p $db_port:$db_port -ti $2
+    fi
   fi
 fi
 
 if [ $1 = "stop" ]; then
-  docker kill $app_name
-  docker kill $db_name
-  docker rm $app_name
-  docker rm $db_name
+  if [ $default_db != null ]; then
+    docker kill $app_name
+    docker kill $db_name
+    docker rm $app_name
+    docker rm $db_name
+  fi
 fi
 
 if [ $1 = "exec" ]; then
-  docker run --rm --link $db_name:$db_name \
+  if [ $default_db != null ]
+  then
+    docker run --rm --link $db_name:$db_name \
        -v $app_dir:/$app_name \
        -p $app_port:$app_port -ti --name $app_name $app_image bash
+  else
+    docker run --rm -v $app_dir:/$app_name -p $app_port:$app_port -ti --name $app_name $app_image bash
+  fi
 fi
 
 if [ $1 = "env" ]; then
-  eval "$(docker-machine env ${2})"
+  eval "$(docker-machine env ${app_image})"
 fi

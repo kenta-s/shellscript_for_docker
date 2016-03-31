@@ -6,8 +6,10 @@ To avoid it, make your own commands by creating a symbolic link.
 `# ln -s /Users/foo/commands/docker_sample /usr/local/bin/docker_sample`
 
 examples:
-- $ docker_sample start            # start the docker container
-- $ docker_sample stop             # stop the container
-- $ docker_sample restart          # restart the container
-- $ docker_sample exec             # enter into the container
-- $ docker_sample env machine_name # execute $ eval $(docker-machine env machine_name)
+- $ docker_sample start   # start the docker container
+- $ docker_sample stop    # stop the container
+- $ docker_sample restart # restart the container
+- $ docker_sample exec    # enter into the container
+- $ docker_sample env     # execute $ eval $(docker-machine env machine_name)
+
+If you want to run the container without DB, please set `default_db=null`
