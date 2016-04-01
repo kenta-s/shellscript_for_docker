@@ -1,5 +1,5 @@
+database_flg=true      # make this false if you want to run the container without DB
 default_db="db"        # the name of docker image(DB)
-# default_db=null
 app_image="app"        # the name of docker image(APP)
 app_name="app"         # this will be a container name.
 db_name="database"     # this will be a container name.
@@ -8,7 +8,7 @@ db_port=5432           # this will be a db port. default is for postgres.
 app_dir="/path/to/app" # this must be specified.
 
 if [ $1 = "start" ]; then
-  if [ $default_db != null ]; then
+  if [ $database_flg = true ]; then
     if [ $# -ne 2 ]
     then
       docker run -d --name $db_name -p $db_port:$db_port -ti $default_db
@@ -19,7 +19,7 @@ if [ $1 = "start" ]; then
 fi
 
 if [ $1 = "restart" ]; then
-  if [ $default_db != null ]; then
+  if [ $database_flg = true ]; then
     docker kill $app_name
     docker kill $db_name
     docker rm $app_name
@@ -34,7 +34,7 @@ if [ $1 = "restart" ]; then
 fi
 
 if [ $1 = "stop" ]; then
-  if [ $default_db != null ]; then
+  if [ $database_flg = true ]; then
     docker kill $app_name
     docker kill $db_name
     docker rm $app_name
@@ -43,7 +43,7 @@ if [ $1 = "stop" ]; then
 fi
 
 if [ $1 = "exec" ]; then
-  if [ $default_db != null ]
+  if [ $database_flg = true ]
   then
     docker run --rm --link $db_name:$db_name \
        -v $app_dir:/$app_name \

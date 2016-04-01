@@ -12,4 +12,4 @@ examples:
 - $ docker_sample exec    # enter into the container
 - $ docker_sample env     # execute $ eval $(docker-machine env machine_name)
 
-If you want to run the container without DB, please set `default_db=null`
+If you want to run the container without DB, please set `database_flg=false`
