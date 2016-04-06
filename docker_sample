@@ -43,13 +43,17 @@ if [ $1 = "stop" ]; then
 fi
 
 if [ $1 = "exec" ]; then
+  docker exec -it $app_name bash
+fi
+
+if [ $1 = "run" ]; then
   if [ $database_flg = true ]
   then
-    docker run --rm --link $db_name:$db_name \
+    docker run --link $db_name:$db_name \
        -v $app_dir:/$app_name \
        -p $app_port:$app_port -ti --name $app_name $app_image bash
   else
-    docker run --rm -v $app_dir:/$app_name -p $app_port:$app_port -ti --name $app_name $app_image bash
+    docker run -v $app_dir:/$app_name -p $app_port:$app_port -ti --name $app_name $app_image bash
   fi
 fi
 
